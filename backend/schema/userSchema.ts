@@ -17,14 +17,11 @@ export interface IUserSchema extends UserType {
       password:         {type: String, required: true},
       profilePictureId: {type: String, default: ""},
       userPicturesIds:  {type: [],  default: []},
-      savedPicturesIds: {type: [],  default: []}
-      //TODO add list of uplodad photos id
-      //TODO add list of saved routes id
-      //TODO add saved photos id
+      savedPicturesIds: {type: [],  default: []},
+      savedRoutes: {type: [],  default: []}
+      
     },
-    {
-      timestamps: true,
-    }
+    {timestamps: true}
   );
   
   export default UserSchema;

@@ -6,6 +6,7 @@ export interface UserType {
     profilePictureId: string;
     userPicturesIds:  string[];
     savedPicturesIds: string[];
+    savedRoutes: string[];
 
   }
   
