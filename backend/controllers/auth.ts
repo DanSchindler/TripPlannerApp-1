@@ -18,12 +18,12 @@ export const userRegisterHandler = async (req:Request,res: Response) =>{
             savedPicturesIds,
             savedRoutes
         } = req.body;*/
-
-        const savedUser = userRegister(newUser);
+        const savedUser = await userRegister(newUser);
         res.status(201).json(savedUser);
    
-    }catch(err){
-        res.status(500).json({error: err.message});
+    }
+    catch(err){
+        res.status(500).json({error: err.message});  
 
     }
 }
