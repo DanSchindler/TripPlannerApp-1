@@ -3,7 +3,7 @@ import { PORT } from './utils/config';
 import { connectDB } from './database/db';
 import { errorHandler } from './middleware/errorHandler';
 import apiRoutes from './routes/apiRoutes';
- 
+
 connectDB();
 const app = express();
 
