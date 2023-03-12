@@ -5,17 +5,12 @@ password: String
 email: @email
 fname: String
 lname: String
-profilePic: FK ProfilePictures._id
+profilePicPath: String
 uploadedPostsIDs: FK Posts_id[]
 likedPostsIDs: FK Posts_id[]
 followingUsers: FK Users.userName[]
 favoriteCities: FK Cities.name[]
 favoriteCategories: FK Categories.name[]
-
-ProfilePictures
--
-_id: unique String
-path: unique Path
 
 Cities
 -
@@ -40,6 +35,7 @@ views: int
 Locations
 -
 _id: unique String
+picturePath: String
 location: Coordinate
 description: String
 
