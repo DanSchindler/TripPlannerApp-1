@@ -1,0 +1,58 @@
+Users
+-
+userName: unique String
+password: String
+email: @email
+fname: String
+lname: String
+profilePic: FK ProfilePictures._id
+uploadedPostsIDs: FK Posts_id[]
+likedPostsIDs: FK Posts_id[]
+followingUsers: FK Users.userName[]
+favoriteCities: FK Cities.name[]
+favoriteCategories: FK Categories.name[]
+
+ProfilePictures
+-
+_id: unique String
+path: unique Path
+
+Cities
+-
+name: unique String
+location: Coordinate
+topUsers: FK Users.userName[]
+topPosts: FK Posts._id[]
+
+Posts
+-
+_id: unique String
+type: [Route/Photo]
+dataID: FK Routes/Locations._id 
+dateUploaded: Date
+uploadedBy: FK Users.userName
+cities: FK Cities.name[]
+categories: FK Categories.name[]
+likes: Map<Users.userName,Boolean>
+comments: Map<Map<Users.userName,String>
+views: int
+
+Locations
+-
+_id: unique String
+location: Coordinate
+description: String
+
+Routes
+-
+_id: unique String
+googleMapping: GOOGLE/MAP 
+description: String
+distance: int
+duration: int
+wayPoints: FK Locations._id[]
+
+Categories
+-
+name: unique String
+topPosts: FK Posts._id[]
