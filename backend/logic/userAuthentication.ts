@@ -3,6 +3,7 @@ import UserModel from "../models/userModel";
 import * as jwt from "jsonwebtoken";
 import { UserType } from "../types/userTypes";
 
+
 export async function userRegister(user: UserType): Promise<UserType>{
 
     //check if email already exist
@@ -16,7 +17,3 @@ export async function userRegister(user: UserType): Promise<UserType>{
     const savedUser = await newUser.save();
     return savedUser;
 }
-
-/*async function userRegisterValidation(user: UserType): Promise<UserType>{
-    
-} */
