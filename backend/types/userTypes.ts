@@ -9,4 +9,9 @@ export interface UserType {
     savedRoutes: string[];
 
   }
+  export interface UserReturnType {
+    _id: string;
+    userEmail: string;
+    token: string;
+  }
   
