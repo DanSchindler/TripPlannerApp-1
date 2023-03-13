@@ -1,13 +1,12 @@
 import { ObjectId, Schema } from 'mongoose';
 import { PostType } from '../types/postType';
-import { postGenreEnum } from '../types/postGenreEnum';
 
 export interface IPostSchema extends PostType {
     _id: ObjectId;
 }
 
 const PostSchema = new Schema<PostType>({
-    postGenre: { type: postGenreEnum as any, required: true },
+    postGenre: { required: true },
     dataID: { type: String, required: true },
     dateUploaded: {
         type: Date,

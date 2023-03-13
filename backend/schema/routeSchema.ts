@@ -1,5 +1,4 @@
 import { ObjectId, Schema } from 'mongoose';
-import { LocationType } from '../types/locationType';
 import { RouteType } from '../types/routeType';
 import { locationsDBName } from '../models/utils';
 
