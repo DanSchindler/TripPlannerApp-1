@@ -1,6 +1,3 @@
-import { Request, Response } from 'express';
-import { UserType } from '../types/userTypes';
-import { userRegister } from '../logic/userAuthentication';
 
 import { Request,Response,NextFunction } from "express";
 import { UserType } from "../types/userTypes";
