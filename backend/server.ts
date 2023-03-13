@@ -9,5 +9,5 @@ const app = express();
 
 app.use(express.json());
 app.use(errorHandler);
-app.use('/api', apiRoutes);
+app.use('', apiRoutes);
 app.listen(PORT, () => console.log('Server is listening on port: ' + PORT));
