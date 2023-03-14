@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { UserType } from '../types/userTypes';
-import { loginUserLocal, userRegisterLocal } from '../logic/userAuthentication';
+import { loginUserLocal, userRegisterLocal } from '../logic/users/userAuthentication';
 import { validationResult } from 'express-validator';
 
 //Register User
