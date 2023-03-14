@@ -8,3 +8,11 @@ export interface UserType {
     savedPicturesIds: string[];
     savedRoutes: string[];
 }
+
+  }
+  export interface UserReturnType {
+    _id: string;
+    userEmail: string;
+    token: string;
+  }
+  

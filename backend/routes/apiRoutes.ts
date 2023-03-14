@@ -1,6 +1,7 @@
 import userRoutes from './api/userAuthRoutes';
 import { RequestHandler, Router } from 'express';
 import postRouter from './api/postRouter';
+import { TryCatchMiddleware } from '../middleware/TryCatchMiddleware';
 
 const apiRoutes = Router();
 
