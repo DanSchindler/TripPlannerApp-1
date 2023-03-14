@@ -16,17 +16,14 @@ export const errorHandler = (
     const message = err.message ?? 'something went wrong...';
     const error = err.error !== null ? err.error : null;
 
+    if (err instanceof BadRequestError || err instanceof NotFoundError) return next(err);
 
-    if (err instanceof BadRequestError || err instanceof NotFoundError) 
-        return next(err);
-    
     const errorResponse = {
         status,
         message,
         error,
         stack: NODE_ENV === 'production' ? '🥞' : err.stack,
-      };
-
+    };
 
     res.status(status).json(errorResponse);
 };
