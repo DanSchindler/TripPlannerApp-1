@@ -1,10 +1,10 @@
 import { postGenreEnum } from './postGenreEnum';
-import { Types } from 'mongoose';
+import { ObjectId, Types } from 'mongoose';
 
 export interface PostType {
-    dataID: string;
+    dataID: ObjectId;
     postGenre: postGenreEnum;
-    dateUploaded: Date;
+    dateUploaded: string;
     uploadedBy: string;
     cities: string[];
     categories: string[];
