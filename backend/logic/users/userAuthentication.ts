@@ -1,10 +1,10 @@
 import * as bcrypt from 'bcrypt';
-import UserModel from '../models/userModel';
-import { UserReturnType, UserType } from '../types/userTypes';
-import { IUserSchema } from '../schema/userSchema';
+import UserModel from '../../models/userModel';
+import { UserReturnType, UserType } from '../../types/userTypes';
+import { IUserSchema } from '../../schema/userSchema';
 import { generateToken } from './tokenService';
-import BadRequestError from '../middleware/errors/BadRequestError';
-import NotFoundErrorrr from '../middleware/errors/NotFoundError';
+import BadRequestError from '../../middleware/errors/BadRequestError';
+import NotFoundErrorrr from '../../middleware/errors/NotFoundError';
 
 //User sign up with user name and password (local)
 export async function userRegisterLocal(user: UserType): Promise<UserType> {
