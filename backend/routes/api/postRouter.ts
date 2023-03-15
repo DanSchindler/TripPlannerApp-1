@@ -1,7 +1,7 @@
 import express = require('express');
 
 import {
-    getFeedPosts,
+    getAllPosts,
     getUserFeed,
     getUserPosts,
     likePost,
@@ -16,7 +16,7 @@ postRouter.post('/createRoute', createRoute);
 postRouter.post('/createLocation', reachedController, createLocation);
 postRouter.get('/:userId/feed', getUserFeed);
 
-postRouter.get('/', getFeedPosts);
+postRouter.get('/explore', reachedController, getAllPosts);
 postRouter.get('/:userId/posts', getUserPosts);
 postRouter.get('/:userId/feed', getUserFeed);
 
