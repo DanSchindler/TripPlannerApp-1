@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
-import { UserType } from '../types/userTypes';
-import { loginUserLocal, userRegisterLocal } from '../logic/userAuthentication';
 import { validationResult } from 'express-validator';
+import { loginUserLocal, userRegisterLocal } from '../logic/users/userAuthentication';
+import { UserType } from '../types/userTypes';
+import { Request, Response, NextFunction } from 'express';
 
 //Register User
 export const userRegisterHandler = async (

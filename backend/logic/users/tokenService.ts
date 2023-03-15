@@ -1,7 +1,7 @@
 import * as JWT from 'jsonwebtoken';
 import { JwtPayload } from 'jsonwebtoken';
 
-import { JWT_SECRET } from '../utils/config';
+import { JWT_SECRET } from '../../utils/config';
 
 interface UserPayload extends JwtPayload {
     _id: string;
