@@ -1,8 +1,20 @@
-// import { PostType } from '../../../types/postType';
-// import PostsModel from '../../../models/postsModel';
+import PostsModel from '../../../models/postsModel';
+import mongoose from 'mongoose';
 
-// export async function supplyPosts(pageInd: number, pageSize: number) {
-//     const newPost = new PostsModel(postToUpload);
-//     const savedPost = await newPost.save();
-//     return savedPost;
-// }
+export async function supplyFilteredPosts(
+    pageInd: number,
+    pageSize: number,
+    filtered_cities: string[]
+) {
+    let filterCondition: mongoose.mquery;
+    if (filtered_cities.length == 0) {
+        filterCondition = {};
+    } else {
+        filterCondition = { cities: { $in: filtered_cities } };
+    }
+    const pagePosts = PostsModel.find(filterCondition)
+        .sort({ createdAt: 'desc' })
+        .skip((pageInd - 1) * pageSize)
+        .limit(pageSize);
+    return pagePosts;
+}
