@@ -1,9 +1,6 @@
 import userRoutes from './api/userAuthRoutes';
 import { RequestHandler, Router } from 'express';
-<<<<<<< HEAD
-import postRouter from './api/postRouter';
-=======
->>>>>>> main
+//import postRouter from './api/postRouter';
 
 const apiRoutes = Router();
 

@@ -1,19 +1,10 @@
 import * as bcrypt from 'bcrypt';
-<<<<<<< HEAD:backend/logic/users/userAuthentication.ts
-import UserModel from '../../models/userModel';
-import { UserReturnType, UserType } from '../../types/userTypes';
-import { IUserSchema } from '../../schema/userSchema';
-import { generateToken } from './tokenService';
-import BadRequestError from '../../middleware/errors/BadRequestError';
-import NotFoundErrorrr from '../../middleware/errors/NotFoundError';
-=======
 import UserModel from '../models/userModel';
 import { UserReturnType, UserType } from '../types/userTypes';
 import { IUserSchema } from '../schema/userSchema';
 import { generateToken } from './tokenService';
 import BadRequestError from '../middleware/errors/BadRequestError';
 import NotFoundErrorrr from '../middleware/errors/NotFoundError';
->>>>>>> main:backend/logic/userAuthentication.ts
 
 //User sign up with user name and password (local)
 export async function userRegisterLocal(user: UserType): Promise<UserType> {
