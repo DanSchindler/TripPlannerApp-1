@@ -12,6 +12,7 @@ const PostSchema = new Schema<PostType>({
     dateUploaded: {
         type: String,
         default: getNow(),
+        index: true,
     },
     uploadedBy: { type: String, required: true },
     cities: { type: [String], default: [], required: true },
