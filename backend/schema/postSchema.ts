@@ -1,16 +1,18 @@
 import { ObjectId, Schema } from 'mongoose';
 import { PostType } from '../types/postType';
+import { getNow } from '../utils/dateTime';
 
 export interface IPostSchema extends PostType {
     _id: ObjectId;
 }
 
 const PostSchema = new Schema<PostType>({
-    postGenre: { required: true },
+    postGenre: { type: Number, required: true },
     dataID: { type: String, required: true },
     dateUploaded: {
-        type: Date,
-        required: true,
+        type: String,
+        default: getNow(),
+        index: true,
     },
     uploadedBy: { type: String, required: true },
     cities: { type: [String], default: [], required: true },
