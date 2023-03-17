@@ -1,15 +1,12 @@
 import * as bcrypt from "bcrypt";
-import UserModel from "../models/userModel";
 import * as JWT from "jsonwebtoken";
-import { UserReturnType, UserType } from "../types/userTypes";
-import { JWT_SECRET } from "../utils/config";
-import { IUserSchema } from "../schema/userSchema";
+import { checkIsValidObjectId } from "../../database/db";
+import BadRequestError from "../../middleware/errors/BadRequestError";
+import NotFoundError from "../../middleware/errors/NotFoundError";
+import UserModel from "../../models/userModel";
+import { IUserSchema } from "../../schema/userSchema";
+import { UserReturnType, UserType } from "../../types/userTypes";
 import { generateToken } from "./tokenService";
-import BadRequestError from "../middleware/errors/BadRequestError";
-import NotFoundErrorrr from "../middleware/errors/NotFoundError";
-import { checkIsValidObjectId } from "../database/db";
-import NotFoundError from "../middleware/errors/NotFoundError";
-
 
 
 
@@ -30,7 +27,7 @@ export async function userRegisterLocal(user: UserType): Promise<UserType> {
 //Logging In
 export async function loginUserLocal(email: string, password: string): Promise<UserReturnType> {
     const user = await UserModel.findOne({ userEmail: email }); //check if email exists in db
-    if (user == null) throw new NotFoundErrorrr('Email not found');
+    if (user == null) throw new NotFoundError('Email not found');
 
     const isPasswordMatch = await bcrypt.compare(password, user.password); //check if password valid
     if (!isPasswordMatch) throw new BadRequestError('Invalid password');
