@@ -1,10 +1,15 @@
-import * as bcrypt from 'bcrypt';
-import UserModel from '../../models/userModel';
-import { UserReturnType, UserType } from '../../types/userTypes';
-import { IUserSchema } from '../../schema/userSchema';
-import { generateToken } from './tokenService';
-import BadRequestError from '../../middleware/errors/BadRequestError';
-import NotFoundErrorrr from '../../middleware/errors/NotFoundError';
+import * as bcrypt from "bcrypt";
+import * as JWT from "jsonwebtoken";
+import { checkIsValidObjectId } from "../../database/db";
+import BadRequestError from "../../middleware/errors/BadRequestError";
+import NotFoundError from "../../middleware/errors/NotFoundError";
+import UserModel from "../../models/userModel";
+import { IUserSchema } from "../../schema/userSchema";
+import { UserReturnType, UserType } from "../../types/userTypes";
+import { generateToken } from "./tokenService";
+
+
+
 
 //User sign up with user name and password (local)
 export async function userRegisterLocal(user: UserType): Promise<UserType> {
@@ -22,7 +27,7 @@ export async function userRegisterLocal(user: UserType): Promise<UserType> {
 //Logging In
 export async function loginUserLocal(email: string, password: string): Promise<UserReturnType> {
     const user = await UserModel.findOne({ userEmail: email }); //check if email exists in db
-    if (user == null) throw new NotFoundErrorrr('Email not found');
+    if (user == null) throw new NotFoundError('Email not found');
 
     const isPasswordMatch = await bcrypt.compare(password, user.password); //check if password valid
     if (!isPasswordMatch) throw new BadRequestError('Invalid password');
@@ -39,4 +44,13 @@ function returnUserWithToken(user: IUserSchema): UserReturnType {
         userEmail: user.userEmail,
         token,
     };
-}
+  }
+  
+
+  export async function getUserById(userId: string): Promise<IUserSchema> {
+    checkIsValidObjectId(userId);
+    const user = await UserModel.findById(userId);
+    if (user == null) throw new NotFoundError('User not found');
+    return user;
+  }
+

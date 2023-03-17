@@ -1,4 +1,10 @@
-import { check } from 'express-validator';
+import { NextFunction,Request } from 'express';
+import { body, sanitizeBody,check } from 'express-validator';
+import { verifyToken } from '../../logic/users/tokenService';
+import { getUserById } from '../../logic/users/userAuthentication';
+import { UserType } from '../../types/userTypes';
+import AuthenticationError from '../errors/AuthenticationError';
+
 
 export const registerValidation = [
     check('userEmail').isEmail().normalizeEmail(),
@@ -29,3 +35,23 @@ export const LoginValidation = [
         .matches(/[A-Z]/)
         .withMessage('Password must contain at least one uppercase letter'),
 ];
+
+
+    
+export const userAuthorization = async (req: Request, res: Response,next: NextFunction) => {
+    
+    let token = req.header("Authorization");
+    if (!token){ throw new AuthenticationError('Not authorized to access this route');};
+
+    if (token.startsWith("Bearer ")){
+        token = token.slice(7, token.length).trimStart();
+    }
+    try {
+        const decoded = verifyToken(token);
+        req.user = req.user = await getUserById(decoded._id);
+ 
+    } catch (error) {
+        throw new AuthenticationError('Invalid token');
+    }
+    next();
+}

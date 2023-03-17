@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import BadRequestError from '../middleware/errors/BadRequestError';
 import { MONGO_URI } from '../utils/config';
 
 export const connectDB = async () => {
@@ -14,3 +15,10 @@ export const connectDB = async () => {
         process.exit(1);
     }
 };
+
+export function checkIsValidObjectId(id: string): void {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new BadRequestError(`${id} is not a valid id`);
+    }
+  }
+  
