@@ -7,6 +7,8 @@ import { IUserSchema } from "../schema/userSchema";
 import { generateToken } from "./tokenService";
 import BadRequestError from "../middleware/errors/BadRequestError";
 import NotFoundErrorrr from "../middleware/errors/NotFoundError";
+import { checkIsValidObjectId } from "../database/db";
+import NotFoundError from "../middleware/errors/NotFoundError";
 
 
 
@@ -48,3 +50,10 @@ function returnUserWithToken(user: IUserSchema): UserReturnType {
     };
   }
   
+
+  export async function getUserById(userId: string): Promise<IUserSchema> {
+    checkIsValidObjectId(userId);
+    const user = await UserModel.findById(userId);
+    if (user == null) throw new NotFoundError('User not found');
+    return user;
+  }

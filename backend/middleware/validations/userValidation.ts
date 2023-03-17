@@ -1,5 +1,14 @@
 import { body, sanitizeBody,check } from 'express-validator';
 import { UserType } from '../../types/userTypes';
+import { NextFunction } from 'express';
+import { Request } from 'express';
+import AuthenticationError from '../errors/AuthenticationError';
+import { JWT_SECRET } from '../../utils/config';
+import { getUserById } from '../../logic/userAuthentication';
+import * as jwt from 'jsonwebtoken';
+import { verifyToken } from '../../logic/tokenService';
+
+
 
 
 export const registerValidation = [
@@ -22,3 +31,20 @@ export const LoginValidation = [
     ];
        
     
+export const userAuthorization = async (req: Request, res: Response,next: NextFunction) => {
+    
+    let token = req.header("Authorization");
+    if (!token){ throw new AuthenticationError('Not authorized to access this route');};
+
+    if (token.startsWith("Bearer ")){
+        token = token.slice(7, token.length).trimStart();
+    }
+    try {
+        const decoded = verifyToken(token);
+        req.user = req.user = await getUserById(decoded._id);
+ 
+    } catch (error) {
+        throw new AuthenticationError('Invalid token');
+    }
+    next();
+}
