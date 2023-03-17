@@ -2,8 +2,9 @@ import { NextFunction,Request } from 'express';
 import { body, sanitizeBody,check } from 'express-validator';
 import { verifyToken } from '../../logic/users/tokenService';
 import { getUserById } from '../../logic/users/userAuthentication';
-import { UserType } from '../../types/userTypes';
+import { UserReturnType, UserType } from '../../types/userTypes';
 import AuthenticationError from '../errors/AuthenticationError';
+import { Response, NextFunction } from 'express'
 
 
 export const registerValidation = [
@@ -38,7 +39,10 @@ export const LoginValidation = [
 
 
     
-export const userAuthorization = async (req: Request, res: Response,next: NextFunction) => {
+export async function userAuthorization (
+    req: Request,
+    _res: Response,
+    next: NextFunction){
     
     let token = req.header("Authorization");
     if (!token){ throw new AuthenticationError('Not authorized to access this route');};
@@ -47,11 +51,11 @@ export const userAuthorization = async (req: Request, res: Response,next: NextFu
         token = token.slice(7, token.length).trimStart();
     }
     try {
-        const decoded = verifyToken(token);
-        req.user = req.user = await getUserById(decoded._id);
- 
+        req.user = verifyToken(token);
+        
     } catch (error) {
         throw new AuthenticationError('Invalid token');
     }
+    
     next();
 }

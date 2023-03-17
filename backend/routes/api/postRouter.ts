@@ -1,4 +1,8 @@
+
 import express = require('express');
+import { RequestHandler } from 'express';
+import { userAuthorization } from '../../middleware/validations/userValidation';
+import { Response, NextFunction } from 'express'
 
 import {
     getExploreFeedPosts,
@@ -12,11 +16,11 @@ import {
 
 const postRouter = express.Router();
 
-postRouter.post('/createRoute', createRoute);
-postRouter.post('/createLocation', reachedController, createLocation);
+postRouter.post('/createRoute',userAuthorization as RequestHandler,createRoute as RequestHandler);
+postRouter.post('/createLocation',userAuthorization as RequestHandler,reachedController, createLocation);
 //postRouter.get('/:userId/feed', getUserFeed);
 
-postRouter.get('/explore', reachedController, getExploreFeedPosts);
+postRouter.get('/explore',reachedController, getExploreFeedPosts);
 postRouter.get('/:userId/posts', getUserPosts);
 postRouter.get('/:userId/feed', getUserFeed);
 
