@@ -4,7 +4,7 @@ import AuthenticationError from '../../middleware/errors/AuthenticationError';
 
 import { JWT_SECRET } from '../../utils/config';
 
-interface UserPayload extends JwtPayload {
+export interface UserPayload extends JwtPayload {
     _id: string;
     email: string;
 }
@@ -17,8 +17,8 @@ export function generateToken(user: UserPayload): string {
 
 export function verifyToken(token: string): UserPayload {
     try {
-      return JWT.verify(token, JWT_SECRET) as UserPayload;
+        return JWT.verify(token, JWT_SECRET) as UserPayload;
     } catch (error) {
-      throw new AuthenticationError('Invalid token');
+        throw new AuthenticationError('Invalid token');
     }
-  }
+}

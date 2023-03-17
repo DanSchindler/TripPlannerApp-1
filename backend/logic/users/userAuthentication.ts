@@ -1,15 +1,11 @@
-import * as bcrypt from "bcrypt";
-import * as JWT from "jsonwebtoken";
-import { checkIsValidObjectId } from "../../database/db";
-import BadRequestError from "../../middleware/errors/BadRequestError";
-import NotFoundError from "../../middleware/errors/NotFoundError";
-import UserModel from "../../models/userModel";
-import { IUserSchema } from "../../schema/userSchema";
-import { UserReturnType, UserType } from "../../types/userTypes";
-import { generateToken } from "./tokenService";
-
-
-
+import * as bcrypt from 'bcrypt';
+import { checkIsValidObjectId } from '../../database/db';
+import BadRequestError from '../../middleware/errors/BadRequestError';
+import NotFoundError from '../../middleware/errors/NotFoundError';
+import UserModel from '../../models/userModel';
+import { IUserSchema } from '../../schema/userSchema';
+import { UserReturnType, UserType } from '../../types/userTypes';
+import { generateToken } from './tokenService';
 
 //User sign up with user name and password (local)
 export async function userRegisterLocal(user: UserType): Promise<UserType> {
@@ -44,13 +40,11 @@ function returnUserWithToken(user: IUserSchema): UserReturnType {
         userEmail: user.userEmail,
         token,
     };
-  }
-  
+}
 
-  export async function getUserById(userId: string): Promise<IUserSchema> {
+export async function getUserById(userId: string): Promise<IUserSchema> {
     checkIsValidObjectId(userId);
     const user = await UserModel.findById(userId);
     if (user == null) throw new NotFoundError('User not found');
     return user;
-  }
-
+}
