@@ -4,6 +4,7 @@ import { LocationType } from '../types/locationType';
 import { uploadLocation, uploadPost } from '../logic/posts/posts/postCreator';
 import { supplyFilteredPosts } from '../logic/posts/posts/postsSupplier';
 import { POSTS_IN_PAGE } from '../utils/config';
+import { IUserSchema } from '../schema/userSchema';
 
 export function reachedController(req: Request, res: Response, next: NextFunction) {
     console.log('reached PostsController');
@@ -45,6 +46,7 @@ export const createLocation = async (req: Request, res: Response) => {
         const newLocation: LocationType = req.body;
         const savedLocation = await uploadLocation(newLocation);
         const newPost: PostType = req.body;
+        newPost.uploadedBy = req.body.user._id;
         newPost.dataID = savedLocation._id;
         const savedPost = await uploadPost(newPost);
         res.status(201).json({ postDetails: savedPost, locationDetail: savedLocation });
