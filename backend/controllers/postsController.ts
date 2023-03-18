@@ -5,8 +5,9 @@ import { LocationType } from '../types/locationType';
 import { uploadLocation, uploadPost } from '../logic/posts/posts/postCreator';
 import { supplyFilteredPosts } from '../logic/posts/posts/postsSupplier';
 import { POSTS_IN_PAGE } from '../utils/config';
-import { uploadImageToCloud } from '../logic/cloudServices/cloudStorageHandler';
+import { uploadImageToCloud } from '../logic/cloudServices/cloudStorageService';
 import BadRequestError from '../middleware/errors/BadRequestError';
+import { detecteImageLabels } from '../logic/cloudServices/googleVisionService';
 
 export function reachedController(req: Request, res: Response, next: NextFunction) {
     console.log('reached PostsController');
@@ -46,16 +47,20 @@ export const createRoute = async (req: Request, res: Response) => {
 export const createLocation = async (req: Request, res: Response) => {
     try {
         if(!req.file){throw new BadRequestError("image not provided")}
-
+        const imageLabels: string[] = await detecteImageLabels(req.file.buffer);
         const imagePath = await uploadImageToCloud(req.file);
+        
+        console.log(imageLabels);
         const newLocation: LocationType = {
             ...req.body,
-            picturePath: imagePath
-          };          
+            picturePath: imagePath,
+        };          
 
+        console.log(newLocation);
         const savedLocation = await uploadLocation(newLocation);
         const newPost: PostType = req.body;
         newPost.dataID = savedLocation._id;
+        newPost.categories = imageLabels;//TODO now its add all lables, we need to filtter relevant categories by lables, for example if imageLabels containg "steak" we need to add food category
         const savedPost = await uploadPost(newPost);
         res.status(201).json({ postDetails: savedPost, locationDetail: savedLocation });
     } catch (err) {

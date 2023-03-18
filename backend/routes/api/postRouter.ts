@@ -13,7 +13,7 @@ import {
     createLocation,
     reachedController,
 } from '../../controllers/postsController';
-import { multer } from '../../logic/cloudServices/cloudStorageHandler';
+import { multer } from '../../logic/cloudServices/cloudStorageService';
 
 const postRouter = express.Router();
 
