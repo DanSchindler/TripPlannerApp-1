@@ -1,9 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import { PostType } from '../types/postType';
+import * as Multer from 'multer';
 import { LocationType } from '../types/locationType';
 import { uploadLocation, uploadPost } from '../logic/posts/posts/postCreator';
 import { supplyFilteredPosts } from '../logic/posts/posts/postsSupplier';
 import { POSTS_IN_PAGE } from '../utils/config';
+import { uploadImageToCloud } from '../logic/cloudServices/cloudStorageHandler';
 
 export function reachedController(req: Request, res: Response, next: NextFunction) {
     console.log('reached PostsController');
@@ -42,6 +44,9 @@ export const createRoute = async (req: Request, res: Response) => {
 
 export const createLocation = async (req: Request, res: Response) => {
     try {
+        if(req.file){
+            const imagePath = uploadImageToCloud(req.file);
+        }
         const newLocation: LocationType = req.body;
         const savedLocation = await uploadLocation(newLocation);
         const newPost: PostType = req.body;
