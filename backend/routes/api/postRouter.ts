@@ -24,7 +24,6 @@ postRouter.post('/createLocation',userAuthorization as RequestHandler,multer.sin
 postRouter.get('/explore',reachedController, getExploreFeedPosts);
 postRouter.get('/:userId/posts', getUserPosts);
 postRouter.get('/:userId/feed', getUserFeed);
-
 postRouter.patch('/:userId/like', likePost);
 
 export default postRouter;

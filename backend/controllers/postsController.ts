@@ -6,6 +6,7 @@ import { uploadLocation, uploadPost } from '../logic/posts/posts/postCreator';
 import { supplyFilteredPosts } from '../logic/posts/posts/postsSupplier';
 import { POSTS_IN_PAGE } from '../utils/config';
 import { uploadImageToCloud } from '../logic/cloudServices/cloudStorageHandler';
+import BadRequestError from '../middleware/errors/BadRequestError';
 
 export function reachedController(req: Request, res: Response, next: NextFunction) {
     console.log('reached PostsController');
@@ -44,16 +45,21 @@ export const createRoute = async (req: Request, res: Response) => {
 
 export const createLocation = async (req: Request, res: Response) => {
     try {
-        if(req.file){
-            const imagePath = uploadImageToCloud(req.file);
-        }
-        const newLocation: LocationType = req.body;
+        if(!req.file){throw new BadRequestError("image not provided")}
+
+        const imagePath = await uploadImageToCloud(req.file);
+        const newLocation: LocationType = {
+            ...req.body,
+            picturePath: imagePath
+          };          
+
         const savedLocation = await uploadLocation(newLocation);
         const newPost: PostType = req.body;
         newPost.dataID = savedLocation._id;
         const savedPost = await uploadPost(newPost);
         res.status(201).json({ postDetails: savedPost, locationDetail: savedLocation });
     } catch (err) {
+        console.log(err);
         res.status(409).json({ message: err.message });
     }
 };

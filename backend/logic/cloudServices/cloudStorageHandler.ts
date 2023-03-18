@@ -10,7 +10,7 @@ import BadRequestError from "../../middleware/errors/BadRequestError";
 export const multer = Multer({
   storage: Multer.memoryStorage(),
   limits:{
-    fileSize: 2 * 2048,
+    fileSize: 2 * 1024 * 1024,
   },
 });
 
@@ -22,13 +22,11 @@ const storage = new Storage({
 
 const bucket = storage.bucket('tripapp_post_images');
 
-
 export  function uploadImageToCloud(file: Express.Multer.File): Promise<string> {
     return new Promise((resolve, reject) => {
         if (!file) {
           reject('Image is missing.');
         }   
-    
         const imageName = uuidv4() + path.extname(file.originalname);
         const blob = bucket.file(imageName);
         const blobStream = blob.createWriteStream();
@@ -42,9 +40,7 @@ export  function uploadImageToCloud(file: Express.Multer.File): Promise<string> 
             resolve(publicUrl);
           });
       
-          blobStream.end(file.buffer);
-        blobStream.on('finish',() => {
-        })
         blobStream.end(file.buffer);
+      
     });
 }
