@@ -11,8 +11,10 @@ import {
     createLocation,
     reachedController,
 } from '../../controllers/postsController';
+import { multer } from '../../logic/cloudServices/cloudStorageService';
 
 const postRouter = express.Router();
+
 
 postRouter.post(
     '/createRoute',
@@ -25,8 +27,10 @@ postRouter.post(
     '/createLocation',
     reachedController,
     userAuthorization as RequestHandler,
+    multer.single("imgfile"),
     createLocation
 );
+
 //postRouter.get('/:userId/feed', getUserFeed);
 
 postRouter.get(
@@ -37,7 +41,6 @@ postRouter.get(
 );
 postRouter.get('/:userId/posts', getUserPosts);
 postRouter.get('/:userId/feed', getUserFeed);
-
 postRouter.patch('/:userId/like', likePost);
 
 export default postRouter;

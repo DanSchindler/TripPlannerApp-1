@@ -1,9 +1,12 @@
-import { NextFunction, Request, Response } from 'express';
-import { check } from 'express-validator';
-import { UserPayload, verifyToken } from '../../logic/users/tokenService';
-import AuthenticationError from '../errors/AuthenticationError';
-import { UserType } from '../../types/userTypes';
+
+import { NextFunction,Request ,Response} from 'express';
+import { body, sanitizeBody,check } from 'express-validator';
+import { verifyToken } from '../../logic/users/tokenService';
 import { getUserById } from '../../logic/users/userAuthentication';
+import { UserReturnType, UserType } from '../../types/userTypes';
+import AuthenticationError from '../errors/AuthenticationError';
+
+
 
 export interface GetUserAuthInfoRequest extends Request {
     user?: UserType;
