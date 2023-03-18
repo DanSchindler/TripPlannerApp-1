@@ -1,10 +1,9 @@
-import { NextFunction,Request } from 'express';
+import { NextFunction,Request ,Response} from 'express';
 import { body, sanitizeBody,check } from 'express-validator';
 import { verifyToken } from '../../logic/users/tokenService';
 import { getUserById } from '../../logic/users/userAuthentication';
 import { UserReturnType, UserType } from '../../types/userTypes';
 import AuthenticationError from '../errors/AuthenticationError';
-import { Response, NextFunction } from 'express'
 
 
 export const registerValidation = [

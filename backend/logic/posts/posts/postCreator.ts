@@ -14,7 +14,7 @@
 import { PostType } from '../../../types/postType';
 import PostsModel from '../../../models/postsModel';
 import { LocationType } from '../../../types/locationType';
-import LocationsModel from '../../../models/locationsModel';
+import LocationsModel from '../../../locationsModel';
 
 export async function uploadPost(postToUpload: PostType) {
     const newPost = new PostsModel(postToUpload);
