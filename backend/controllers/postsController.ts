@@ -4,7 +4,6 @@ import { LocationType } from '../types/locationType';
 import { uploadLocation, uploadPost } from '../logic/posts/posts/postCreator';
 import { supplyFilteredPosts } from '../logic/posts/posts/postsSupplier';
 import { POSTS_IN_PAGE } from '../utils/config';
-import { IUserSchema } from '../schema/userSchema';
 
 export function reachedController(req: Request, res: Response, next: NextFunction) {
     console.log('reached PostsController');
