@@ -59,6 +59,7 @@ export const createLocation = async (req: Request, res: Response) => {
         console.log(newLocation);
         const savedLocation = await uploadLocation(newLocation);
         const newPost: PostType = req.body;
+        newPost.uploadedBy = req.body.user._id;
         newPost.dataID = savedLocation._id;
         newPost.categories = imageLabels;//TODO now its add all lables, we need to filtter relevant categories by lables, for example if imageLabels containg "steak" we need to add food category
         const savedPost = await uploadPost(newPost);

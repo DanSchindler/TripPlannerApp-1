@@ -18,7 +18,6 @@ export const connectDB = async () => {
 
 export function checkIsValidObjectId(id: string): void {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      throw new BadRequestError(`${id} is not a valid id`);
+        throw new BadRequestError(`${id} is not a valid id`);
     }
-  }
-  
+}

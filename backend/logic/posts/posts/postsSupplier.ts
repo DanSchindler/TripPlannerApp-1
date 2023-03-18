@@ -1,5 +1,10 @@
 import PostsModel from '../../../models/postsModel';
 import mongoose from 'mongoose';
+import { PostType } from '../../../types/postType';
+import LocationsModel from '../../../models/locationsModel';
+import { postGenreEnum } from '../../../types/postGenreEnum';
+import { createPostDTO, PostDTOType } from '../../../types/PostDTOType';
+import RoutesModel from '../../../models/routesModel';
 
 export async function supplyFilteredPosts(
     pageInd: number,
@@ -12,9 +17,27 @@ export async function supplyFilteredPosts(
     } else {
         filterCondition = { cities: { $in: filtered_cities } };
     }
-    const pagePosts = PostsModel.find(filterCondition)
+    const pagePosts = await PostsModel.find(filterCondition)
         .sort({ createdAt: 'desc' })
         .skip((pageInd - 1) * pageSize)
         .limit(pageSize);
-    return pagePosts;
+    const allPostsDTO = addSpecificDataToPosts(pagePosts);
+    return allPostsDTO;
+}
+
+async function addSpecificDataToPosts(posts: PostType[]): Promise<PostDTOType[]> {
+    const allPostsDTO: PostDTOType[] = [];
+    for (const post of posts) {
+        const postDTO = createPostDTO(post);
+        console.log(postDTO);
+        if (post.postGenre === postGenreEnum.Location) {
+            const locationDoc = await LocationsModel.findOne({ _id: post.dataID });
+            postDTO.contentData = locationDoc;
+        } else if (post.postGenre === postGenreEnum.Route) {
+            const routeDoc = await RoutesModel.findOne({ _id: post.dataID });
+            postDTO.contentData = routeDoc;
+        }
+        allPostsDTO.push(postDTO);
+    }
+    return allPostsDTO;
 }

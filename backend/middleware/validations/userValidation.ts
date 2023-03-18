@@ -1,3 +1,4 @@
+
 import { NextFunction,Request ,Response} from 'express';
 import { body, sanitizeBody,check } from 'express-validator';
 import { verifyToken } from '../../logic/users/tokenService';
@@ -6,6 +7,10 @@ import { UserReturnType, UserType } from '../../types/userTypes';
 import AuthenticationError from '../errors/AuthenticationError';
 
 
+
+export interface GetUserAuthInfoRequest extends Request {
+    user?: UserType;
+}
 export const registerValidation = [
     check('userEmail').isEmail().normalizeEmail(),
     check('password')
@@ -36,25 +41,25 @@ export const LoginValidation = [
         .withMessage('Password must contain at least one uppercase letter'),
 ];
 
-
-    
-export async function userAuthorization (
-    req: Request,
+export async function userAuthorization(
+    req: GetUserAuthInfoRequest,
     _res: Response,
-    next: NextFunction){
-    
-    let token = req.header("Authorization");
-    if (!token){ throw new AuthenticationError('Not authorized to access this route');};
+    next: NextFunction
+) {
+    let token = req.header('Authorization');
+    if (!token) {
+        throw new AuthenticationError('Not authorized to access this route');
+    }
 
-    if (token.startsWith("Bearer ")){
+    if (token.startsWith('Bearer ')) {
         token = token.slice(7, token.length).trimStart();
     }
     try {
-        req.user = verifyToken(token);
-        
+        const decode = verifyToken(token) as UserPayload;
+        req.body.user = await getUserById(decode._id);
     } catch (error) {
         throw new AuthenticationError('Invalid token');
     }
-    
+
     next();
 }
