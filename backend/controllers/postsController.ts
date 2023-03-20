@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { PostType } from '../types/postType';
 import { LocationType } from '../types/locationType';
 import { uploadLocation, uploadPost } from '../logic/posts/posts/postCreator';
-import { supplyFilteredPosts } from '../logic/posts/posts/postsSupplier';
+import { supplyFilteredPosts, supplyUserWall } from '../logic/posts/posts/postsSupplier';
 import { POSTS_IN_PAGE } from '../utils/config';
 
 export function reachedController(req: Request, res: Response, next: NextFunction) {
@@ -28,8 +28,16 @@ export const getUserFeed = async (req: Request, res: Response) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const getUserPosts = async (req: Request, res: Response) => {
-    console.log('reached to getUserPosts');
+export const getUserWall = async (req: Request, res: Response) => {
+    const pageInd = (req.body.page || 1) as number;
+    const pageSize = (req.body.pageSize || POSTS_IN_PAGE) as number;
+    const userId = req.params.userId;
+    try {
+        const allPosts = await supplyUserWall(pageInd, pageSize, userId);
+        res.status(201).json({ allPosts });
+    } catch (err) {
+        res.status(409).json({ message: err.message });
+    }
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const likePost = async (req: Request, res: Response) => {
