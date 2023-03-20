@@ -25,6 +25,15 @@ export async function supplyFilteredPosts(
     return allPostsDTO;
 }
 
+export async function supplyUserWall(pageInd: number, pageSize: number, userId: string) {
+    const pagePosts = await PostsModel.find({ uploadedBy: userId })
+        .sort({ createdAt: 'desc' })
+        .skip((pageInd - 1) * pageSize)
+        .limit(pageSize);
+    const allPostsDTO = addSpecificDataToPosts(pagePosts);
+    return allPostsDTO;
+}
+
 async function addSpecificDataToPosts(posts: PostType[]): Promise<PostDTOType[]> {
     const allPostsDTO: PostDTOType[] = [];
     for (const post of posts) {
