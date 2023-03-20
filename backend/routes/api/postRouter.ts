@@ -5,7 +5,7 @@ import { userAuthorization } from '../../middleware/validations/userValidation';
 import {
     getExploreFeedPosts,
     getUserFeed,
-    getUserPosts,
+    getUserWall,
     likePost,
     createRoute,
     createLocation,
@@ -39,7 +39,12 @@ postRouter.get(
     userAuthorization as RequestHandler,
     getExploreFeedPosts
 );
-postRouter.get('/:userId/posts', getUserPosts);
+postRouter.get(
+    '/:userId/wall',
+    reachedController,
+    getUserWall
+    // ,userAuthorization as RequestHandler,
+);
 postRouter.get('/:userId/feed', getUserFeed);
 postRouter.patch('/:userId/like', likePost);
 
