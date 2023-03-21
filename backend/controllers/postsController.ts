@@ -1,13 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
 import { PostType } from '../types/postType';
-import * as Multer from 'multer';
 import { LocationType } from '../types/locationType';
-import { uploadLocation, uploadPost } from '../logic/posts/posts/postCreator';
+import {
+    createNewPostFromData,
+    uploadLocation,
+    uploadPost,
+} from '../logic/posts/posts/postCreator';
 import { supplyFilteredPosts, supplyUserWall } from '../logic/posts/posts/postsSupplier';
 import { POSTS_IN_PAGE } from '../utils/config';
-import { uploadImageToCloud } from '../logic/cloudServices/cloudStorageService';
-import BadRequestError from '../middleware/errors/BadRequestError';
-import { detecteImageLabels } from '../logic/cloudServices/googleVisionService';
+import { ImageDataType, uploadImage } from '../types/ImageDataType';
 
 export function reachedController(req: Request, res: Response, next: NextFunction) {
     console.log('reached PostsController');
@@ -54,22 +55,20 @@ export const createRoute = async (req: Request, res: Response) => {
 
 export const createLocation = async (req: Request, res: Response) => {
     try {
-        if(!req.file){throw new BadRequestError("image not provided")}
-        const imageLabels: string[] = await detecteImageLabels(req.file.buffer);
-        const imagePath = await uploadImageToCloud(req.file);
-        
-        console.log(imageLabels);
+        const uploadedImage: ImageDataType = await uploadImage(req);
         const newLocation: LocationType = {
             ...req.body,
-            picturePath: imagePath,
-        };          
-
+            picturePath: uploadedImage.imagePath,
+        };
         console.log(newLocation);
         const savedLocation = await uploadLocation(newLocation);
-        const newPost: PostType = req.body;
-        newPost.uploadedBy = req.body.user._id;
-        newPost.dataID = savedLocation._id;
-        newPost.categories = imageLabels;//TODO now its add all lables, we need to filtter relevant categories by lables, for example if imageLabels containg "steak" we need to add food category
+        const newPost: PostType = createNewPostFromData(
+            req,
+            res,
+            req.body.user_id,
+            savedLocation._id,
+            uploadedImage.imageLabels
+        );
         const savedPost = await uploadPost(newPost);
         res.status(201).json({ postDetails: savedPost, locationDetail: savedLocation });
     } catch (err) {
