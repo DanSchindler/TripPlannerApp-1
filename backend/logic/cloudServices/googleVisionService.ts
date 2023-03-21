@@ -1,18 +1,14 @@
-import { ImageAnnotatorClient } from '@google-cloud/vision';
 import { KEY_FILE, PROJECT_ID } from '../../utils/config';
 
-
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const vision = require('@google-cloud/vision');
 
 const client = new vision.ImageAnnotatorClient({
     projectId: PROJECT_ID,
     keyFilename: KEY_FILE,
-  });
+});
 
-  
-  
-export async function detecteImageLabels(buffer: Buffer):Promise<string[]> {
-  
+export async function detectImageLabels(buffer: Buffer): Promise<string[]> {
     // Performs label detection on the image file
 
     const [result] = await client.labelDetection(buffer);
@@ -21,11 +17,9 @@ export async function detecteImageLabels(buffer: Buffer):Promise<string[]> {
         console.log('No labels found for the image');
         console.log(result);
         throw new Error('No labels found for the image');
-      
-
+    } else {
+        return labels
+            .filter((label: { score: number }) => label.score > 0.65)
+            .map((label: any) => label.description);
     }
-    else{
-        return labels.filter((label: { score: number; }) => label.score > 0.65).map((label: any) => label.description);
-    }
-
-  }
+}

@@ -11,10 +11,11 @@ import {
     createLocation,
     reachedController,
 } from '../../controllers/postsController';
+
 import { multer } from '../../logic/cloudServices/cloudStorageService';
+import { IMAGE_REQUEST_KEY } from '../../utils/config';
 
 const postRouter = express.Router();
-
 
 postRouter.post(
     '/createRoute',
@@ -27,7 +28,7 @@ postRouter.post(
     '/createLocation',
     reachedController,
     userAuthorization as RequestHandler,
-    multer.single("imgfile"),
+    multer.single(IMAGE_REQUEST_KEY),
     createLocation
 );
 
